@@ -1,8 +1,8 @@
-import express from 'express'
-import mongoose from 'mongoose'
-import dotenv from 'dotenv'
-import morgan from 'morgan'
-dotenv.config()
+const express = require('express');
+const mongoose = require('mongoose');
+const morgan = require('morgan')
+require('dotenv').config()
+const authRoutes = require('./routes/Auth')
 
 const app = express()
 
@@ -17,3 +17,6 @@ mongoose.connect(process.env.DB_URL)
         console.log("Server is running")
     })
 })
+
+app.use('/api/auth', authRoutes);
+
