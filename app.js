@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const morgan = require('morgan')
 require('dotenv').config()
 const authRoutes = require('./routes/Auth')
-const userRouter = require('./routes/User')
+const userRoutes = require('./routes/User')
+const productsRoutes = require('./routes/Products');
 
 const app = express()
 
@@ -20,5 +21,5 @@ mongoose.connect(process.env.DB_URL)
 })
 
 app.use('/api/auth', authRoutes);
-app.use('/api/user', userRouter);
-
+app.use('/api/user', userRoutes);
+app.use('/api/products', productsRoutes)
