@@ -27,6 +27,10 @@ const productSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    featuredImages:{
+        type:Array,
+        required:false,
+    },
     categories:{
         type:Array,
         required:true,
