@@ -1,6 +1,14 @@
 const { trusted } = require('mongoose');
 const Product = require('../models/Product')
 const errorHandler = require('../utils/errorHandler');
+const cloudinary = require('cloudinary');
+const fs = require('fs');
+
+cloudinary.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.API_KEY,
+    api_secret: process.env.API_SECRET
+});
 
 const getAllProducts= async (req,res)=>{
     const category = req.query.category
@@ -43,6 +51,23 @@ const createAProduct = async (req,res)=>{
     slug = slug.replace(/^-+/, '') // Trim — from start of text
     slug = slug.replace(/-+$/, ''); // Trim — from end of text
     product.slug = slug  
+    const file = req.file
+    if(file){
+        let imageLink = '';
+        try{
+            await cloudinary.v2.uploader.upload(file.path)
+            .then(result=>{
+                imageLink = result.secure_url
+                product.image = imageLink;
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+            fs.unlinkSync(file.path)
+        }catch(err){
+            console.log("Error occured while uploading");
+        }
+    }
     try{
         const savedProduct = await Product.create(product)
         res.status(201).json({savedProduct, message:'Product uploaded successfully', status:true});
