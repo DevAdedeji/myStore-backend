@@ -9,10 +9,10 @@ const getAllProducts= async (req,res)=>{
             const products = await Product.find({categories:{
                 $in:[category]
             }});
-            res.status(200).json(products);
+            res.status(200).json({products, status:true});
         }else{
             const products = await Product.find();
-        res.status(200).json(products);
+            res.status(200).json({products, status:true});
         }
         
     }catch(err){
@@ -24,9 +24,9 @@ const getAProduct= async (req,res)=>{
     try{
         const product = await Product.find({slug});
         if(product){
-            res.status(200).json(product)
+            res.status(200).json({product, status:true})
         }else{
-            res.status(404).json({error:{message:'Product not found'}})
+            res.status(404).json({error:{message:'Product not found', status:false}})
         }
     }catch(err){
         res.status(500).json(err)
@@ -45,7 +45,7 @@ const createAProduct = async (req,res)=>{
     product.slug = slug  
     try{
         const savedProduct = await Product.create(product)
-    res.status(201).json(savedProduct);
+        res.status(201).json({savedProduct, message:'Product uploaded successfully', status:true});
     }
     catch(err){
         const errors = errorHandler(err)
@@ -63,7 +63,7 @@ const updateAProduct= async (req,res)=>{
     try{
         const updatedProduct = await Product.findOneAndUpdate({slug}, product, {new:true});
         if(updatedProduct){
-            res.status(200).json(updatedProduct)
+            res.status(200).json({updatedProduct, message:'Product updated successfully', status:true})
         }else{
             res.status(404).json({error:{message:'Product not found'}})
         }
@@ -76,7 +76,7 @@ const deleteAProduct= async (req,res)=>{
     try{
         const product = await Product.deleteOne({slug});
         if(product){
-            res.status(200).json(product)
+            res.status(200).json({message:'Product deleted successfully', status:true})
         }else{
             res.status(404).json({error:{message:'Product not found'}})
         }
