@@ -14,17 +14,13 @@ const getAllProducts= async (req,res)=>{
     const limit = req.query.limit;
     try{
         if(category){
-            const products = await Product.find({categories:{
-                $in:[category]
-            }});
+            const products = await Product.find({category:category});
             res.status(200).json({products, status:true});
         } else if(limit){
             const products = await Product.find().limit(limit);
             res.status(200).json({products, status:true});
         }else if(category && limit){
-            const products = await Product.find({categories:{
-                $in:[category]
-            }}).limit(limit);
+            const products = await Product.find({category:category}).limit(limit);
             res.status(200).json({products, status:true});
         }
         else{
@@ -120,5 +116,18 @@ const deleteAProduct= async (req,res)=>{
     }
 }
 
+// const deleteAllProducts= async (req,res)=>{
+    
+//     try{
+//         const products = await Product.deleteMany();
+//         if(products){
+//             res.status(200).json({message:'Products deleted successfully', status:true})
+//         }else{
+//             res.status(404).json({error:{message:'Product not found'}})
+//         }
+//     }catch(err){
+//         res.status(500).json(err)
+//     }
+// }
 
 module.exports = {getAllProducts, getAProduct, updateAProduct, deleteAProduct, createAProduct};

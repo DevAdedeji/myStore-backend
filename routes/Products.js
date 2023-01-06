@@ -8,6 +8,6 @@ router.get('/:slug', productController.getAProduct);
 router.put('/:slug', productController.updateAProduct);
 router.delete('/:slug', productController.deleteAProduct);
 router.post('/add-product',upload.single('file') ,productController.createAProduct);
-
+// router.delete('/', productController.deleteAllProducts);
 
 module.exports = router

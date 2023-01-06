@@ -31,8 +31,8 @@ const productSchema = new mongoose.Schema({
         type:Array,
         required:false,
     },
-    categories:{
-        type:Array,
+    category:{
+        type:String,
         required:true,
     }
 }, {timestamps:true})
