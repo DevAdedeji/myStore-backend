@@ -1,4 +1,3 @@
-const { trusted } = require('mongoose');
 const Product = require('../models/Product')
 const errorHandler = require('../utils/errorHandler');
 const cloudinary = require('cloudinary');
