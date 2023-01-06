@@ -12,16 +12,27 @@ cloudinary.config({
 
 const getAllProducts= async (req,res)=>{
     const category = req.query.category
+    const limit = req.query.limit;
     try{
         if(category){
             const products = await Product.find({categories:{
                 $in:[category]
             }});
             res.status(200).json({products, status:true});
-        }else{
+        } else if(limit){
+            const products = await Product.find().limit(limit);
+            res.status(200).json({products, status:true});
+        }else if(category && limit){
+            const products = await Product.find({categories:{
+                $in:[category]
+            }}).limit(limit);
+            res.status(200).json({products, status:true});
+        }
+        else{
             const products = await Product.find();
             res.status(200).json({products, status:true});
         }
+
         
     }catch(err){
         res.status(500).json({error:'Something went wrong, pls try again'})
@@ -30,7 +41,7 @@ const getAllProducts= async (req,res)=>{
 const getAProduct= async (req,res)=>{
     const slug = req.params.slug
     try{
-        const product = await Product.find({slug});
+        const product = await Product.findOne({slug});
         if(product){
             res.status(200).json({product, status:true})
         }else{
